@@ -1,0 +1,42 @@
+
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ApiGateway
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: CarService
+          uri: lb://CARSERVICE
+          predicates:
+            - Path=/car/**
+            - Method=GET,POST
+          filters:
+            - AddRequestHeader= X-Custom-Header, Sanjeeban
+        - id: CustomerService
+          uri: lb://CUSTOMERSERVICE
+          predicates:
+            - Path=/customer/**
+            - Method=GET,POST
+        - id: OrderService
+          uri: lb://ORDERSERVICE
+          predicates:
+            - Path=/customer_order/**
+            - Method=GET,POST
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true

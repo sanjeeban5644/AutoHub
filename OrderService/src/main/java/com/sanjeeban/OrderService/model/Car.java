@@ -1,17 +1,12 @@
-package com.sanjeeban.CarService.dto;
-
+package com.sanjeeban.OrderService.model;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-public class CarDto {
+public class Car {
 
-
+    private Long carId;
     private String brand;
     private String model;
     private Integer year;
@@ -21,6 +16,13 @@ public class CarDto {
     private String transmission;
     private Integer stockQuantity;
 
+    public Long getCarId() {
+        return carId;
+    }
+
+    public void setCarId(Long carId) {
+        this.carId = carId;
+    }
 
     public String getBrand() {
         return brand;

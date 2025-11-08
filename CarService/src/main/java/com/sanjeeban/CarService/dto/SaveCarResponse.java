@@ -1,18 +1,9 @@
 package com.sanjeeban.CarService.dto;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-public class CarDto {
-
-
-    private String brand;
+public class SaveCarResponse {
+        private String brand;
     private String model;
     private Integer year;
     private BigDecimal price;
@@ -20,6 +11,16 @@ public class CarDto {
     private String fuelType;
     private String transmission;
     private Integer stockQuantity;
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    private String remarks;
 
 
     public String getBrand() {
@@ -86,3 +87,7 @@ public class CarDto {
         this.stockQuantity = stockQuantity;
     }
 }
+
+
+
+
