@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ApiGateway/ApiGateway.iml" filepath="$PROJECT_DIR$/ApiGateway/ApiGateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CarService/CarService.iml" filepath="$PROJECT_DIR$/CarService/CarService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerService/CustomerService.iml" filepath="$PROJECT_DIR$/CustomerService/CustomerService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DiscoveryService/DiscoveryService.iml" filepath="$PROJECT_DIR$/DiscoveryService/DiscoveryService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/OrderService/OrderService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Project6_AutoHub.iml" filepath="$PROJECT_DIR$/.idea/Project6_AutoHub.iml" />
+    </modules>
+  </component>
+</project>
