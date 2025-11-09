@@ -1,10 +1,10 @@
 package com.sanjeeban.CarService.service;
 
 
-import com.netflix.discovery.converters.Auto;
-import com.sanjeeban.CarService.controller.CarAdminController;
 import com.sanjeeban.CarService.customException.CarNotFoundException;
+import com.sanjeeban.CarService.customException.NotEnoughStockException;
 import com.sanjeeban.CarService.dto.CarDto;
+import com.sanjeeban.CarService.dto.CarResponseForOrders;
 import com.sanjeeban.CarService.dto.SaveCarResponse;
 import com.sanjeeban.CarService.entitiy.Cars;
 import com.sanjeeban.CarService.repository.CarRepository;
@@ -70,6 +70,31 @@ public class CarAdminService {
         }
 
         return response;
+
+    }
+
+    public Integer getCurrentCarStock(Long carId) {
+        Integer currentStock = carRepository.getCurrentStockByCarId(carId).orElseThrow(() -> new CarNotFoundException("Car not found with Car Id : "+carId));
+        return currentStock;
+    }
+
+    public CarResponseForOrders getCarByCarId(Long carId) {
+        Cars currentCar = carRepository.getCarByCarId(carId).orElseThrow(() -> new CarNotFoundException("Car not found with Car Id : "+carId));
+        return modelMapper.map(currentCar,CarResponseForOrders.class);
+    }
+
+    public CarResponseForOrders updateStock(Long carId, Integer quantity) {
+        Cars currentCar = carRepository.getCarByCarId(carId).orElseThrow(() -> new CarNotFoundException("Car not found with Car Id : "+carId));
+
+        Integer currentQuantity = currentCar.getStockQuantity();
+
+        if(currentQuantity>=quantity){
+            currentCar.setStockQuantity(currentQuantity-quantity);
+            carRepository.save(currentCar);
+            return modelMapper.map(currentCar,CarResponseForOrders.class);
+        }else{
+            throw new NotEnoughStockException("Current stock is : "+currentQuantity+" Required quantity is : "+quantity);
+        }
 
     }
 }

@@ -1,12 +1,14 @@
 package com.sanjeeban.CarService.controller;
 
 import com.sanjeeban.CarService.dto.CarDto;
+import com.sanjeeban.CarService.dto.CarResponseForOrders;
 import com.sanjeeban.CarService.dto.SaveCarResponse;
 import com.sanjeeban.CarService.service.CarAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.service.annotation.PutExchange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,26 @@ public class CarAdminController {
             return ResponseEntity.ok(response);
     }
 
+
+    @GetMapping(path="/checkStock")
+    public ResponseEntity<Integer> checkStock(@RequestParam Long carId){
+        Integer stock = carAdminService.getCurrentCarStock(carId);
+        return ResponseEntity.ok(stock);
+    }
+
+
+    @GetMapping(path="/getCarById")
+    public ResponseEntity<CarResponseForOrders> getCarById(@RequestParam Long carId){
+        CarResponseForOrders response = carAdminService.getCarByCarId(carId);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping(path="/updateCar")
+    public ResponseEntity<CarResponseForOrders> updateStock(@RequestParam Long carId,@RequestParam Integer quantity){
+        CarResponseForOrders response = carAdminService.updateStock(carId,quantity);
+        return ResponseEntity.ok(response);
+    }
 
 
 }

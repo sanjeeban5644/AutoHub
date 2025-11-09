@@ -1,5 +1,6 @@
 package com.sanjeeban.OrderService.dto;
 
+import com.sanjeeban.OrderService.entity.Orders;
 import com.sanjeeban.OrderService.model.Car;
 import com.sanjeeban.OrderService.model.Customer;
 
@@ -7,6 +8,15 @@ public class OrderStatusDto {
     private String orderStatus;
     private Customer customerDetails;
     private Car carDetails;
+    private Orders orderDetails;
+
+    public Orders getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(Orders orderDetails) {
+        this.orderDetails = orderDetails;
+    }
 
     public String getOrderStatus() {
         return orderStatus;

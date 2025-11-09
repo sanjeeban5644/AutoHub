@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoHub - Car Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo">🚗 AutoHub</h1>
+            <ul class="nav-links">
+                <li><a href="#cars" class="nav-link active" data-section="cars">Cars</a></li>
+                <li><a href="#customer" class="nav-link" data-section="customer">Customer Info</a></li>
+                <li><a href="#order" class="nav-link" data-section="order">Place Order</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Cars Section -->
+        <section id="cars" class="section active">
+            <h2>Car Inventory</h2>
+            
+            <!-- Search Form -->
+            <div class="card">
+                <h3>Search Cars</h3>
+                <form id="searchForm" class="form">
+                    <div class="form-group">
+                        <label for="brand">Brand:</label>
+                        <input type="text" id="brand" placeholder="Enter brand (e.g., Toyota)">
+                    </div>
+                    <div class="form-group">
+                        <label for="model">Model:</label>
+                        <input type="text" id="model" placeholder="Enter model (e.g., Camry)">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <button type="button" id="viewAllCars" class="btn btn-secondary">View All Cars</button>
+                </form>
+            </div>
+
+            <!-- Add New Car Form -->
+            <div class="card">
+                <h3>Add New Car</h3>
+                <form id="addCarForm" class="form">
+                    <div class="form-group">
+                        <label for="newBrand">Brand:</label>
+                        <input type="text" id="newBrand" required placeholder="Enter brand">
+                    </div>
+                    <div class="form-group">
+                        <label for="newModel">Model:</label>
+                        <input type="text" id="newModel" required placeholder="Enter model">
+                    </div>
+                    <div class="form-group">
+                        <label for="newPrice">Price:</label>
+                        <input type="number" id="newPrice" required placeholder="Enter price" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="newStock">Stock Quantity:</label>
+                        <input type="number" id="newStock" required placeholder="Enter stock quantity">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Car</button>
+                </form>
+            </div>
+
+            <!-- Cars Display -->
+            <div class="card">
+                <h3>Available Cars</h3>
+                <div id="carsContainer" class="cars-grid">
+                    <p class="loading">Loading cars...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Section -->
+        <section id="customer" class="section">
+            <h2>Customer Information</h2>
+            
+            <div class="card">
+                <h3>Search Customer</h3>
+                <form id="customerSearchForm" class="form">
+                    <div class="form-group">
+                        <label for="customerEmail">Email:</label>
+                        <input type="email" id="customerEmail" required placeholder="Enter customer email">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search Customer</button>
+                </form>
+            </div>
+
+            <div id="customerInfoContainer"></div>
+        </section>
+
+        <!-- Order Section -->
+        <section id="order" class="section">
+            <h2>Place New Order</h2>
+            
+            <div class="card">
+                <h3>Order Form</h3>
+                <form id="orderForm" class="form">
+                    <div class="form-group">
+                        <label for="orderCustomerId">Customer ID:</label>
+                        <input type="number" id="orderCustomerId" required placeholder="Enter customer ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderCarId">Car ID:</label>
+                        <input type="number" id="orderCarId" required placeholder="Enter car ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderQuantity">Quantity:</label>
+                        <input type="number" id="orderQuantity" required min="1" placeholder="Enter quantity">
+                    </div>
+                    <button type="button" id="checkStockBtn" class="btn btn-secondary">Check Stock</button>
+                    <button type="submit" class="btn btn-primary">Place Order</button>
+                </form>
+                <div id="stockInfo" class="info-message"></div>
+            </div>
+
+            <div id="orderResultContainer"></div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/api.js"></script>
+    <script src="js/car.js"></script>
+    <script src="js/customer.js"></script>
+    <script src="js/order.js"></script>
+    <script>
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+                
+                // Update active nav link
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Update active section
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
