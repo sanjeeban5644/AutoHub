@@ -7,142 +7,257 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <h1 class="logo">🚗 AutoHub</h1>
-            <ul class="nav-links">
-                <li><a href="#cars" class="nav-link active" data-section="cars">Cars</a></li>
-                <li><a href="#customer" class="nav-link" data-section="customer">Customer Info</a></li>
-                <li><a href="#order" class="nav-link" data-section="order">Place Order</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <main class="container">
-        <!-- Cars Section -->
-        <section id="cars" class="section active">
-            <h2>Car Inventory</h2>
-            
-            <!-- Search Form -->
-            <div class="card">
-                <h3>Search Cars</h3>
-                <form id="searchForm" class="form">
+    <!-- Login Section -->
+    <section id="loginSection" class="login-section">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo-large">🚗</div>
+                    <h1>Welcome to AutoHub</h1>
+                    <p>Your Premier Car Management System</p>
+                </div>
+                <form id="loginForm" class="login-form">
                     <div class="form-group">
-                        <label for="brand">Brand:</label>
-                        <input type="text" id="brand" placeholder="Enter brand (e.g., Toyota)">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required placeholder="Enter username" autocomplete="username">
                     </div>
                     <div class="form-group">
-                        <label for="model">Model:</label>
-                        <input type="text" id="model" placeholder="Enter model (e.g., Camry)">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required placeholder="Enter password" autocomplete="current-password">
                     </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                    <button type="button" id="viewAllCars" class="btn btn-secondary">View All Cars</button>
+                    <button type="submit" class="btn btn-primary btn-large">Login</button>
                 </form>
-            </div>
-
-            <!-- Add New Car Form -->
-            <div class="card">
-                <h3>Add New Car</h3>
-                <form id="addCarForm" class="form">
-                    <div class="form-group">
-                        <label for="newBrand">Brand:</label>
-                        <input type="text" id="newBrand" required placeholder="Enter brand">
-                    </div>
-                    <div class="form-group">
-                        <label for="newModel">Model:</label>
-                        <input type="text" id="newModel" required placeholder="Enter model">
-                    </div>
-                    <div class="form-group">
-                        <label for="newPrice">Price:</label>
-                        <input type="number" id="newPrice" required placeholder="Enter price" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label for="newStock">Stock Quantity:</label>
-                        <input type="number" id="newStock" required placeholder="Enter stock quantity">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Add Car</button>
-                </form>
-            </div>
-
-            <!-- Cars Display -->
-            <div class="card">
-                <h3>Available Cars</h3>
-                <div id="carsContainer" class="cars-grid">
-                    <p class="loading">Loading cars...</p>
+                <div class="login-info">
+                    <h4>Demo Credentials:</h4>
+                    <p><strong>Admin:</strong> admin / admin123</p>
+                    <p><strong>Customer:</strong> customer / customer123</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Customer Section -->
-        <section id="customer" class="section">
-            <h2>Customer Information</h2>
-            
-            <div class="card">
-                <h3>Search Customer</h3>
-                <form id="customerSearchForm" class="form">
-                    <div class="form-group">
-                        <label for="customerEmail">Email:</label>
-                        <input type="email" id="customerEmail" required placeholder="Enter customer email">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Search Customer</button>
-                </form>
+    <!-- Main App (Hidden until login) -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <nav class="navbar">
+            <div class="container">
+                <h1 class="logo">🚗 AutoHub</h1>
+                <div class="nav-right">
+                    <span class="user-info" id="userInfo"></span>
+                    <button id="logoutBtn" class="btn btn-logout">Logout</button>
+                </div>
             </div>
+        </nav>
 
-            <div id="customerInfoContainer"></div>
-        </section>
+        <div class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="menu-item admin-only">
+                    <a href="#dashboard" class="menu-link active" data-section="dashboard">
+                        <span class="menu-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item admin-only">
+                    <a href="#cars" class="menu-link" data-section="cars">
+                        <span class="menu-icon">🚙</span>
+                        <span>Car Inventory</span>
+                    </a>
+                </li>
+                <li class="menu-item admin-only">
+                    <a href="#customer" class="menu-link" data-section="customer">
+                        <span class="menu-icon">👤</span>
+                        <span>Customer Info</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#order" class="menu-link" data-section="order">
+                        <span class="menu-icon">🛒</span>
+                        <span>Place Order</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#browse" class="menu-link" data-section="browse">
+                        <span class="menu-icon">🔍</span>
+                        <span>Browse Cars</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
 
-        <!-- Order Section -->
-        <section id="order" class="section">
-            <h2>Place New Order</h2>
-            
-            <div class="card">
-                <h3>Order Form</h3>
-                <form id="orderForm" class="form">
-                    <div class="form-group">
-                        <label for="orderCustomerId">Customer ID:</label>
-                        <input type="number" id="orderCustomerId" required placeholder="Enter customer ID">
+        <main class="main-content">
+            <div class="container">
+                <!-- Dashboard Section (Admin Only) -->
+                <section id="dashboard" class="section active admin-only">
+                    <h2>Admin Dashboard</h2>
+                    <div class="dashboard-cards">
+                        <div class="stat-card stat-card-blue">
+                            <div class="stat-icon">🚗</div>
+                            <div class="stat-content">
+                                <h3 id="totalCars">0</h3>
+                                <p>Total Cars</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-card-green">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-content">
+                                <h3 id="inStockCars">0</h3>
+                                <p>In Stock</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-card-orange">
+                            <div class="stat-icon">⚠️</div>
+                            <div class="stat-content">
+                                <h3 id="lowStockCars">0</h3>
+                                <p>Low Stock</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-card-red">
+                            <div class="stat-icon">❌</div>
+                            <div class="stat-content">
+                                <h3 id="outOfStockCars">0</h3>
+                                <p>Out of Stock</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="orderCarId">Car ID:</label>
-                        <input type="number" id="orderCarId" required placeholder="Enter car ID">
+                </section>
+
+                <!-- Cars Section (Admin Only) -->
+                <section id="cars" class="section admin-only">
+                    <h2>Car Inventory Management</h2>
+                    
+                    <!-- Add New Car Form -->
+                    <div class="card card-gradient-blue">
+                        <h3>➕ Add New Car</h3>
+                        <form id="addCarForm" class="form">
+                            <div class="form-group">
+                                <label for="newBrand">Brand:</label>
+                                <input type="text" id="newBrand" required placeholder="Enter brand">
+                            </div>
+                            <div class="form-group">
+                                <label for="newModel">Model:</label>
+                                <input type="text" id="newModel" required placeholder="Enter model">
+                            </div>
+                            <div class="form-group">
+                                <label for="newPrice">Price:</label>
+                                <input type="number" id="newPrice" required placeholder="Enter price" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="newStock">Stock Quantity:</label>
+                                <input type="number" id="newStock" required placeholder="Enter stock quantity">
+                            </div>
+                            <button type="submit" class="btn btn-success">Add Car</button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="orderQuantity">Quantity:</label>
-                        <input type="number" id="orderQuantity" required min="1" placeholder="Enter quantity">
+
+                    <!-- Search Form -->
+                    <div class="card card-gradient-purple">
+                        <h3>🔍 Search Cars</h3>
+                        <form id="searchForm" class="form">
+                            <div class="form-group">
+                                <label for="brand">Brand:</label>
+                                <input type="text" id="brand" placeholder="Enter brand (e.g., Toyota)">
+                            </div>
+                            <div class="form-group">
+                                <label for="model">Model:</label>
+                                <input type="text" id="model" placeholder="Enter model (e.g., Camry)">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="button" id="viewAllCars" class="btn btn-secondary">View All</button>
+                        </form>
                     </div>
-                    <button type="button" id="checkStockBtn" class="btn btn-secondary">Check Stock</button>
-                    <button type="submit" class="btn btn-primary">Place Order</button>
-                </form>
-                <div id="stockInfo" class="info-message"></div>
+
+                    <!-- Cars Display -->
+                    <div class="card">
+                        <h3>Available Cars</h3>
+                        <div id="carsContainer" class="cars-grid">
+                            <p class="loading">Loading cars...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Customer Section (Admin Only) -->
+                <section id="customer" class="section admin-only">
+                    <h2>Customer Information</h2>
+                    
+                    <div class="card card-gradient-green">
+                        <h3>🔍 Search Customer</h3>
+                        <form id="customerSearchForm" class="form">
+                            <div class="form-group">
+                                <label for="customerEmail">Email:</label>
+                                <input type="email" id="customerEmail" required placeholder="Enter customer email">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search Customer</button>
+                        </form>
+                    </div>
+
+                    <div id="customerInfoContainer"></div>
+                </section>
+
+                <!-- Browse Cars Section (All Users) -->
+                <section id="browse" class="section">
+                    <h2>Browse Available Cars</h2>
+                    
+                    <div class="card card-gradient-orange">
+                        <h3>🔍 Filter Cars</h3>
+                        <form id="browseSearchForm" class="form">
+                            <div class="form-group">
+                                <label for="browseBrand">Brand:</label>
+                                <input type="text" id="browseBrand" placeholder="Enter brand">
+                            </div>
+                            <div class="form-group">
+                                <label for="browseModel">Model:</label>
+                                <input type="text" id="browseModel" placeholder="Enter model">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="button" id="viewAllBrowseCars" class="btn btn-secondary">View All</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <h3>Available Cars</h3>
+                        <div id="browseCarsContainer" class="cars-grid">
+                            <p class="loading">Loading cars...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Order Section (All Users) -->
+                <section id="order" class="section">
+                    <h2>Place New Order</h2>
+                    
+                    <div class="card card-gradient-pink">
+                        <h3>🛒 Order Form</h3>
+                        <form id="orderForm" class="form">
+                            <div class="form-group">
+                                <label for="orderCustomerId">Customer ID:</label>
+                                <input type="number" id="orderCustomerId" required placeholder="Enter customer ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="orderCarId">Car ID:</label>
+                                <input type="number" id="orderCarId" required placeholder="Enter car ID">
+                            </div>
+                            <div class="form-group">
+                                <label for="orderQuantity">Quantity:</label>
+                                <input type="number" id="orderQuantity" required min="1" placeholder="Enter quantity">
+                            </div>
+                            <button type="button" id="checkStockBtn" class="btn btn-warning">Check Stock</button>
+                            <button type="submit" class="btn btn-success">Place Order</button>
+                        </form>
+                        <div id="stockInfo" class="info-message"></div>
+                    </div>
+
+                    <div id="orderResultContainer"></div>
+                </section>
             </div>
-
-            <div id="orderResultContainer"></div>
-        </section>
-    </main>
+        </main>
+    </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
     <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
     <script src="js/car.js"></script>
     <script src="js/customer.js"></script>
     <script src="js/order.js"></script>
-    <script>
-        // Navigation
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sectionId = link.getAttribute('data-section');
-                
-                // Update active nav link
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-                
-                // Update active section
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                document.getElementById(sectionId).classList.add('active');
-            });
-        });
-    </script>
 </body>
 </html>

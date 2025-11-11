@@ -3,9 +3,11 @@
 // Get all cars or search by brand and model
 async function getCars(brand = '', model = '') {
     try {
-        const params = {};
-        if (brand) params.brand = brand;
-        if (model) params.model = model;
+        // Always include parameters, even if empty (backend expects them)
+        const params = {
+            brand: brand || '',
+            model: model || ''
+        };
         
         const cars = await get(API_ENDPOINTS.CAR.GET_BY_BRAND_MODEL, params);
         return cars;
@@ -107,56 +109,146 @@ function getStockClass(stock) {
     return 'stock-in';
 }
 
+// Display browse cars (for customer view)
+function displayBrowseCars(cars) {
+    const container = document.getElementById('browseCarsContainer');
+    
+    if (!cars || cars.length === 0) {
+        container.innerHTML = '<p class="error-message">No cars available</p>';
+        return;
+    }
+    
+    // Filter only in-stock cars for customers
+    const availableCars = cars.filter(car => car.availableStock > 0);
+    
+    if (availableCars.length === 0) {
+        container.innerHTML = '<p class="error-message">No cars currently available</p>';
+        return;
+    }
+    
+    container.innerHTML = availableCars.map(car => `
+        <div class="car-card">
+            <h4>${car.brand || 'Unknown'} ${car.model || 'Unknown'}</h4>
+            <div class="car-details">
+                <div class="car-detail">
+                    <span class="car-detail-label">Car ID:</span>
+                    <span class="car-detail-value">${car.carId || 'N/A'}</span>
+                </div>
+                <div class="car-detail">
+                    <span class="car-detail-label">Price:</span>
+                    <span class="car-detail-value">${car.price ? car.price.toLocaleString() : 'N/A'}</span>
+                </div>
+                <div class="car-detail">
+                    <span class="car-detail-label">Availability:</span>
+                    <span class="car-detail-value">
+                        <span class="stock-badge ${getStockClass(car.availableStock)}">
+                            ${car.availableStock} Available
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Load browse cars
+async function loadBrowseCars() {
+    const container = document.getElementById('browseCarsContainer');
+    container.innerHTML = '<p class="loading">Loading available cars...</p>';
+    
+    try {
+        const cars = await getCars();
+        displayBrowseCars(cars);
+    } catch (error) {
+        container.innerHTML = '<p class="error-message">Error loading cars</p>';
+    }
+}
+
 // Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
-    // Load all cars on page load
-    loadAllCars();
-    
-    // Search form
+    // Admin search form
     const searchForm = document.getElementById('searchForm');
-    searchForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const brand = document.getElementById('brand').value.trim();
-        const model = document.getElementById('model').value.trim();
-        
-        const container = document.getElementById('carsContainer');
-        container.innerHTML = '<p class="loading">Searching...</p>';
-        
-        try {
-            const cars = await getCars(brand, model);
-            displayCars(cars);
-        } catch (error) {
-            container.innerHTML = '<p class="error-message">Error loading cars</p>';
-        }
-    });
+    if (searchForm) {
+        searchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const brand = document.getElementById('brand').value.trim();
+            const model = document.getElementById('model').value.trim();
+            
+            const container = document.getElementById('carsContainer');
+            container.innerHTML = '<p class="loading">Searching...</p>';
+            
+            try {
+                const cars = await getCars(brand, model);
+                displayCars(cars);
+            } catch (error) {
+                container.innerHTML = '<p class="error-message">Error loading cars</p>';
+            }
+        });
+    }
     
-    // View all cars button
+    // View all cars button (admin)
     const viewAllBtn = document.getElementById('viewAllCars');
-    viewAllBtn.addEventListener('click', loadAllCars);
+    if (viewAllBtn) {
+        viewAllBtn.addEventListener('click', loadAllCars);
+    }
     
-    // Add car form
+    // Browse search form (customer)
+    const browseSearchForm = document.getElementById('browseSearchForm');
+    if (browseSearchForm) {
+        browseSearchForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const brand = document.getElementById('browseBrand').value.trim();
+            const model = document.getElementById('browseModel').value.trim();
+            
+            const container = document.getElementById('browseCarsContainer');
+            container.innerHTML = '<p class="loading">Searching...</p>';
+            
+            try {
+                const cars = await getCars(brand, model);
+                displayBrowseCars(cars);
+            } catch (error) {
+                container.innerHTML = '<p class="error-message">Error loading cars</p>';
+            }
+        });
+    }
+    
+    // View all browse cars button (customer)
+    const viewAllBrowseBtn = document.getElementById('viewAllBrowseCars');
+    if (viewAllBrowseBtn) {
+        viewAllBrowseBtn.addEventListener('click', loadBrowseCars);
+    }
+    
+    // Add car form (admin only)
     const addCarForm = document.getElementById('addCarForm');
-    addCarForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const carData = {
-            brand: document.getElementById('newBrand').value.trim(),
-            model: document.getElementById('newModel').value.trim(),
-            price: parseFloat(document.getElementById('newPrice').value),
-            availableStock: parseInt(document.getElementById('newStock').value)
-        };
-        
-        try {
-            await saveCar(carData);
-            addCarForm.reset();
-            loadAllCars(); // Reload all cars
-        } catch (error) {
-            console.error('Failed to add car');
-        }
-    });
+    if (addCarForm) {
+        addCarForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!isAdmin()) {
+                showToast('Access denied: Admin only', 'error');
+                return;
+            }
+            
+            const carData = {
+                brand: document.getElementById('newBrand').value.trim(),
+                model: document.getElementById('newModel').value.trim(),
+                price: parseFloat(document.getElementById('newPrice').value),
+                availableStock: parseInt(document.getElementById('newStock').value)
+            };
+            
+            try {
+                await saveCar(carData);
+                addCarForm.reset();
+                loadAllCars();
+                loadDashboard(); // Update dashboard stats
+            } catch (error) {
+                console.error('Failed to add car');
+            }
+        });
+    }
 });
 
-// Load all cars
+// Load all cars (admin view)
 async function loadAllCars() {
     const container = document.getElementById('carsContainer');
     container.innerHTML = '<p class="loading">Loading cars...</p>';
