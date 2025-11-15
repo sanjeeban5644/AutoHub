@@ -8,6 +8,10 @@ import com.sanjeeban.OrderService.entity.Orders;
 import com.sanjeeban.OrderService.model.Car;
 import com.sanjeeban.OrderService.model.Customer;
 import com.sanjeeban.OrderService.repository.OrdersRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
@@ -31,9 +35,12 @@ public class CustomerOrderService {
     }
 
 
+//    @Retry(name="orderRetry",fallbackMethod = "orderCarFallback")
+    @CircuitBreaker(name="orderCircuitBreaker",fallbackMethod = "orderCarCircuitBreaker")
+    //@RateLimiter(name="orderRateLimiter",fallbackMethod = "orderCarRateLimiter")
     public OrderStatusDto orderCar(OrderRequest request) {
         OrderStatusDto response = new OrderStatusDto();
-
+        System.out.println("**Calling orderCar service**");
 
         //find if the customer is valid or not.
 
@@ -129,4 +136,27 @@ public class CustomerOrderService {
 
         return response;
     }
+
+
+    public OrderStatusDto orderCarFallback(OrderRequest request, Throwable throwable) {
+        OrderStatusDto response = new OrderStatusDto();
+        response.setOrderStatus("Failed after retrying due to some error.");
+        return response;
+    }
+
+
+    public OrderStatusDto orderCarRateLimiter(OrderRequest request, Throwable throwable) {
+        OrderStatusDto response = new OrderStatusDto();
+        response.setOrderStatus("Failed after retrying due to some error.|| Rate Limiter");
+        return response;
+    }
+
+    public OrderStatusDto orderCarCircuitBreaker(OrderRequest request, Throwable throwable) {
+        OrderStatusDto response = new OrderStatusDto();
+        response.setOrderStatus("Failed after retrying due to some error.|| CircuitBreaker");
+        return response;
+    }
+
+
+
 }

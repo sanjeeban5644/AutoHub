@@ -1,0 +1,43 @@
+resilience4j:
+  retry:
+    instances:
+      orderRetry:
+        maxRetryAttempts: 3
+        waitDuration: 10s
+  rateLimiter:
+    instances:
+      orderRateLimiter:
+        limitRefreshPeriod: 5s
+        limitForPeriod: 1
+        timeoutDuration: 1s
+  circuitbreaker:
+    instances:
+      orderCircuitBreaker:
+        registerHealthIndicator: true
+        # Sliding window size (count-based or time-based)
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        # Minimum calls before circuit can open
+        minimumNumberOfCalls: 5
+        # Failure rate threshold (percentage)
+        failureRateThreshold: 50
+        # Wait time in OPEN state before HALF_OPEN
+        waitDurationInOpenState: 60s
+        # Permitted calls in HALF_OPEN state
+        permittedNumberOfCallsInHalfOpenState: 3
+        # Slow call duration threshold
+        slowCallDurationThreshold: 2s
+        slowCallRateThreshold: 60
+
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
