@@ -28,6 +28,11 @@ spring:
           uri: lb://ORDERSERVICE
           predicates:
             - Path=/customer_order/**
+          filters:
+            - name: LoggingOrdersFilter
+            - name: Authentication
+              args:
+                isEnabled: true
           # REMOVED StripPrefix - let the full path go through
 
       # Optional: Add global CORS configuration here too
@@ -58,3 +63,7 @@ springdoc:
         url: /customer/v3/api-docs
       - name: Order Service
         url: /customer_order/v3/api-docs
+
+
+jwt:
+  secretKey: ahsdiulhasvnjlrjkdhncyw487r78q6t578tcn94v63487r639478v65987tc6987r

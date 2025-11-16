@@ -5,10 +5,7 @@ import com.sanjeeban.OrderService.dto.OrderStatusDto;
 import com.sanjeeban.OrderService.service.CustomerOrderService;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customer_order")
@@ -19,6 +16,16 @@ public class CustomerOrderController {
     public CustomerOrderController(CustomerOrderService customerOrderService){
         this.customerOrderService = customerOrderService;
     }
+
+
+    @GetMapping("/helloOrder")
+    public String helloOrder(@RequestHeader("X-User-Id")String username){
+        return  "Hello from Order with username"+username;
+    }
+
+
+
+
 
     @PostMapping(value = "/orderCar",consumes = "application/json",produces = "application/json")
     public ResponseEntity<OrderStatusDto> orderCar(@RequestBody OrderRequest request){

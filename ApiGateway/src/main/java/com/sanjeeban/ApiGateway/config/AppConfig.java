@@ -11,31 +11,31 @@ import java.util.Arrays;
 @Configuration
 public class AppConfig {
 
-    @Bean
-    public CorsWebFilter corsWebFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        // Allow both localhost and 127.0.0.1
-        config.setAllowedOrigins(Arrays.asList(
-                "http://127.0.0.1:5500",
-                "http://localhost:5500"
-        ));
-
-        // Allow all HTTP methods
-        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-        // Allow all headers
-        config.setAllowedHeaders(Arrays.asList("*"));
-
-        // Allow credentials
-        config.setAllowCredentials(true);
-
-        // Cache preflight response for 1 hour
-        config.setMaxAge(3600L);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return new CorsWebFilter(source);
-    }
+//    @Bean
+//    public CorsWebFilter corsWebFilter() {
+//        CorsConfiguration config = new CorsConfiguration();
+//
+//        // Allow both localhost and 127.0.0.1
+//        config.setAllowedOrigins(Arrays.asList(
+//                "http://127.0.0.1:5500",
+//                "http://localhost:5500"
+//        ));
+//
+//        // Allow all HTTP methods
+//        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//
+//        // Allow all headers
+//        config.setAllowedHeaders(Arrays.asList("*"));
+//
+//        // Allow credentials
+//        config.setAllowCredentials(true);
+//
+//        // Cache preflight response for 1 hour
+//        config.setMaxAge(3600L);
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", config);
+//
+//        return new CorsWebFilter(source);
+//    }
 }
