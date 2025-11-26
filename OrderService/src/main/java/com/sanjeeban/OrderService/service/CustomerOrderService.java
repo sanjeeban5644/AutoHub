@@ -5,15 +5,15 @@ import com.sanjeeban.OrderService.customException.EntityNotFoundException;
 import com.sanjeeban.OrderService.dto.OrderRequest;
 import com.sanjeeban.OrderService.dto.OrderStatusDto;
 import com.sanjeeban.OrderService.entity.Orders;
+import com.sanjeeban.OrderService.event.OrderEvent;
 import com.sanjeeban.OrderService.model.Car;
 import com.sanjeeban.OrderService.model.Customer;
 import com.sanjeeban.OrderService.repository.OrdersRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
-import org.modelmapper.internal.bytebuddy.implementation.bytecode.Throw;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -28,10 +28,16 @@ public class CustomerOrderService {
     private final RestClient restClient;
     private final OrdersRepository ordersRepository;
 
-    public CustomerOrderService(DiscoveryClient discoveryClient, RestClient restClient, OrdersRepository ordersRepository) {
+    private final KafkaTemplate<Long, OrderEvent> kafkaTemplate;
+
+    @Value("${kafka.topic.order-event-topic}")
+    private String KAFKA_ORDER_EVENT_TOPIC;
+
+    public CustomerOrderService(DiscoveryClient discoveryClient, RestClient restClient, OrdersRepository ordersRepository, KafkaTemplate<Long, OrderEvent> kafkaTemplate) {
         this.discoveryClient = discoveryClient;
         this.restClient = restClient;
         this.ordersRepository = ordersRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -133,6 +139,12 @@ public class CustomerOrderService {
         }else{
             response.setOrderStatus("Purchased the car");
         }
+
+        OrderEvent orderEvent = new OrderEvent();
+        orderEvent.setOrderStatus(response.getOrderStatus());
+        orderEvent.setCarId(request.getCarId());
+        orderEvent.setCustomerId(request.getCustomerId());
+        kafkaTemplate.send(KAFKA_ORDER_EVENT_TOPIC,orderEvent.getCarId(),orderEvent);
 
         return response;
     }

@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/CarService/CarService.iml" filepath="$PROJECT_DIR$/CarService/CarService.iml" />
       <module fileurl="file://$PROJECT_DIR$/CustomerService/CustomerService.iml" filepath="$PROJECT_DIR$/CustomerService/CustomerService.iml" />
       <module fileurl="file://$PROJECT_DIR$/DiscoveryService/DiscoveryService.iml" filepath="$PROJECT_DIR$/DiscoveryService/DiscoveryService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NotificationService/NotificationService.iml" filepath="$PROJECT_DIR$/NotificationService/NotificationService.iml" />
       <module fileurl="file://$PROJECT_DIR$/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/OrderService/OrderService.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Project6_AutoHub.iml" filepath="$PROJECT_DIR$/.idea/Project6_AutoHub.iml" />
     </modules>

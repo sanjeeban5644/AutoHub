@@ -7,8 +7,13 @@ import com.sanjeeban.OrderService.model.Customer;
 public class OrderStatusDto {
     private String orderStatus;
     private Customer customerDetails;
+
+
+
     private Car carDetails;
     private Orders orderDetails;
+
+    private String kafkaStatus;
 
     public Orders getOrderDetails() {
         return orderDetails;
@@ -40,5 +45,13 @@ public class OrderStatusDto {
 
     public void setCarDetails(Car carDetails) {
         this.carDetails = carDetails;
+    }
+
+    public String getKafkaStatus() {
+        return kafkaStatus;
+    }
+
+    public void setKafkaStatus(String kafkaStatus) {
+        this.kafkaStatus = kafkaStatus;
     }
 }
